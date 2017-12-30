@@ -106,13 +106,16 @@ public class Main {
 		 */
 
 		server = new Server(port);
+		// Serve from jar...
+		//https://stackoverflow.com/questions/1462953/embedded-jetty-looking-for-files-inside-its-jar-file
 		List<ResourceHandler> resourceHandlers = new ArrayList<ResourceHandler>();
 		for (Skin skin : HostProperties.Instance().getSkins()) {
 			if (skin.isActive()) {
 				ResourceHandler resource_handler = new ResourceHandler();
 		        resource_handler.setDirectoriesListed(true);
-		        resource_handler.setWelcomeFiles(skin.getWelcomeFiles());
-		        resource_handler.setResourceBase(skin.getResourceBase());
+						resource_handler.setWelcomeFiles(skin.getWelcomeFiles());
+						String jarDir = Main.class.getClassLoader().getResource(skin.getResourceBase()).toExternalForm();
+		        resource_handler.setResourceBase(jarDir);
 		        resourceHandlers.add(resource_handler);
 			}
 		}
